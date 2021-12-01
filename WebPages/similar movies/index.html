@@ -51,19 +51,25 @@
 
 <body onload="getSimilarMovies()" style="background-color:black;">
   <div id="app" class="container" style="background-color:white;">
+
     
     <!-- 
             Image Checkbox Bootstrap template for multiple image selection
             https://www.prepbootstrap.com/bootstrap-template/image-checkbox
             -->
-    <h1 style="text-align:center; align-items: center;">Please select similar movies:</h1>
-    <div><a href="#"><button type="button" class="btn btn-primary" style="width:100%" onclick="runML()">Next</button></a></div>        
+    <h1 style="text-align:center; align-items: center;">Please select similar movies</h1>
+    <div id ="tc" style="margin-top: 10px;margin-bottom: 10px;">
+      <div id="spb" role="status">
+        <span id="sr1"></span>
+      </div>
+    </div>
+    <div><a href="#"><button type="button" class="btn btn-primary" style="width:100%" onclick="loading()">Next</button></a></div>        
     <script src="https://kit.fontawesome.com/d715a5bf1d.js" crossorigin="anonymous"></script>
     <div id="image-container" onload="fixProb()">
       
       
     </div>
-    <div><a href="#"><button type="button" class="btn btn-primary" style="width:100%" onclick="runML()">Next</button></a></div>
+    <div><a href="#"><button type="button" class="btn btn-primary" style="width:100%" onclick="loading()">Next</button></a></div>
   </div>
 
   

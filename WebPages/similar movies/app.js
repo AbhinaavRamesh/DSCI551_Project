@@ -24,6 +24,13 @@ function fixProb()
         });
       
 }
+function loading(){
+    document.getElementById('tc').setAttribute("class","text-center");
+    document.getElementById('spb').setAttribute("class","spinner-border");
+    document.getElementById('sr1').setAttribute("class","sr-only");
+    document.getElementById('sr1').innerHTML="ML Modelling....Loading Predictions....";
+    runML();
+}
 function getSimilarMovies() {
     if (localStorage['actor']!='null'){actor = localStorage['actor']} else{actor=null}
     if (localStorage['genre']!='null'){genre = localStorage['genre']} else{genre=null}

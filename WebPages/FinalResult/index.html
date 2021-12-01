@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet prefetch" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
   <!--script src="https://kit.fontawesome.com/d715a5bf1d.js" crossorigin="anonymous"></script-->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <!--link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous"--->
   <style class="cp-pen-styles">
     .nopad {
       padding-left: 0 !important;
@@ -40,16 +40,60 @@
 </head>
 
 <body style="background-color:black;" onload="loadMovies()">
+  <nav class="navbar navbar-inverse" style="width:100%;">
+    <div class="container" style="width:100%;">
+        <div class="row" style="width:100%;margin-left: 2%;margin-right: 2%;margin-top: 1%;">
+          <div class="col">
+
+            <h3 class="nav navbar-nav navbar-header" style="color: white;text-align: center;">Movie Recommendation Application</h3>
+          </div>
+          <div class="col-6">
+            
+          </div>
+          <div class="col">
+            <ul class="nav navbar-nav navbar-right" style="margin-right: 3%;">
+                <li ><a href="../cover/index.html">Home</a></li>
+                <li><a href="../mldb_page/index.html">ML Database Archive</a></li>
+                <li><a href="../selection2/index.html">Data Analysis</a></li>
+              </ul>
+          </div>
+        </div>
+    </div>
+</nav>
   <div class="container" style="background-color:white;">
-    
+      
     <div><h1 style="text-align:center; align-items: center;"><b>Recommended Movies !</b></h1></div>
     <script src="https://kit.fontawesome.com/d715a5bf1d.js" crossorigin="anonymous"></script>
     <div  id="image-container">
       
+    <br/>
+
     </div>
     <div><a href="../cover/index.html"><button type="button" class="btn btn-primary" style="width:100%" >Go back to Home</button></a></div>
+
+    <br/>
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+    <div class="container" style="width:80%;align-items: center;">
+        <div class="row header" style="text-align:center;color:green">
+            <h3> Feature Table </h3>
+        </div>
+        <table id="example" class="table table-striped table-bordered" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Features</th>
+                    <th>TFIDF Scores</th>
+                </tr>
+            </thead>
+            <tbody id="table_body">
+            </tbody>
+        </table>
+    </div>
+
 </div>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="app.js"></script>
 </body>
 

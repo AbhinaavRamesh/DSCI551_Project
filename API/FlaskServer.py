@@ -36,7 +36,7 @@ stop_words = list(set(stopwords.words()))
 conf = SparkConf()#.set('spark.driver.memory', '4g').set('spark.executor.memory', '4g').set('spark.executor.memoryOverhead','8G')
 sc = SparkContext("local")
 spark = SparkSession(sc)
-client=MongoClient("mongodb+srv://abhinaav:abhinaav@cluster0.x69n5.mongodb.net/movie_recommendation?retryWrites=true&w=majority")#,ssl_cert_reqs=ssl.CERT_NONE)
+client=MongoClient("mongodb+srv://abhinaav:abhinaav@cluster0.rzzqy.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
 
 import re
 from time import sleep
@@ -131,8 +131,10 @@ def ML_API(dictFilter,similarMovies=[]):
     dfData=getData(dictFilter)
     dfMLDB=getMLDB()
     if len(dfMLDB)>0:
-
-        temp=dfMLDB.loc[(dfMLDB["FilterInfo"]==dictFilter) & (dfMLDB["lenData"]==len(dfData))& (dfMLDB["similarMovies"]==str1)] 
+        try:
+            temp=dfMLDB.loc[(dfMLDB["FilterInfo"]==dictFilter) & (dfMLDB["lenData"]==len(dfData))& (dfMLDB["similarMovies"]==str1)] 
+        except:
+            return similarMovies
         # print(temp)
         # ls1=temp["similarMovies"]
         # import functools 
@@ -261,6 +263,8 @@ def ML_API(dictFilter,similarMovies=[]):
                                 recommendations.append(recom)
                                 recommendationCnt+=1
                                 break
+                        else:
+                            break
         columns=["imdb_title_id","prediction"]
         for it in result_pdf.columns:
             if it not in columns:
@@ -597,6 +601,28 @@ def view_dataset(dataset_id):
 
     return {"data":return_val}
 
+@app.route('/view_mldb_data/',methods=['GET','POST'])
+@cross_origin(supports_credentials=True)
+def view_mldb_data():
+
+    db = client['movie_recommendation']
+    collection = db['MLDB']
+
+    print("before connection")
+
+    content = list(collection.find({},{"_id":0}))
+    df=pd.DataFrame(content)
+    print("after connection")
+    return_val = []
+    for idx in range(len(content)):
+        # print(idx)
+        temp = []
+        for col in df.columns:
+            temp.append(re.sub(r'\W+,', '',str(content[idx][col])))
+        return_val.append(temp)
+
+    return {"data":return_val}
+
 @app.route('/stream_producer/',methods=['GET','POST'])
 @cross_origin(supports_credentials=True)
 def stream_producer():
@@ -643,11 +669,27 @@ def stream_consumer(dataset_id):
 
     return "Success"
 
+@app.route('/get_features/',methods=['GET','POST'])
+@cross_origin(supports_credentials=True)
+def get_features():
+    db = client['movie_recommendation']
+    collection = db['MLDB']
+
+    req_json = request.get_json()
+    content = pd.DataFrame(list(collection.find({},{"_id":0})))
+    features = None
+    for i in range(len(content)):
+        recommendation = content.iloc[i]["Recommendations"]
+        if recommendation == req_json["data"]:
+            features = content.iloc[i]["Features"]
+
+    return features
+
 @app.route('/view_dataset_page/<dataset_id>',methods=['GET','POST'])
 @cross_origin(supports_credentials=True)
 def view_dataset_page(dataset_id):
     return render_template('index.html', dataset_id=dataset_id)
-@app.route('/WebPages')
+# @app.route('/WebPages')
 def WebPages():
     return render_template('../WebPages/cover/index.html')
 if __name__ == '__main__':
@@ -655,3 +697,8 @@ if __name__ == '__main__':
     parser.add_argument("--port")
     args=parser.parse_args()
     app.run(debug=False,port=int(args.port))
+
+
+
+
+
