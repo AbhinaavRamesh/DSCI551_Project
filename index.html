@@ -1,0 +1,158 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet prefetch" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <script src="https://kit.fontawesome.com/d715a5bf1d.js" crossorigin="anonymous"></script>
+  <style class="cp-pen-styles">
+    .nopad {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
+
+    .image-checkbox {
+      cursor: pointer;
+      box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      -webkit-box-sizing: border-box;
+      border: 10px solid transparent;
+      margin-bottom: 0;
+      outline: 0;
+    }
+
+    .image-checkbox input[type="checkbox"] {
+      display: none;
+    }
+
+    .image-checkbox-checked {
+      border-color: #4783B0;
+    }
+
+    .image-checkbox .fa {
+      position: absolute;
+      color: #4A79A3;
+      background-color: #fff;
+      padding: 10px;
+      top: 0;
+      right: 0;
+    }
+
+    .image-checkbox-checked .fa {
+      display: block !important;
+    }
+  </style>
+</head>
+
+<body onload="getSimilarMovies()" style="background-color:peachpuff;">
+  <div id="app">
+    <!-- 
+            Image Checkbox Bootstrap template for multiple image selection
+            https://www.prepbootstrap.com/bootstrap-template/image-checkbox
+            -->
+    <script src="https://kit.fontawesome.com/d715a5bf1d.js" crossorigin="anonymous"></script>
+    <div class="container" id="image-container">
+      <h3>Please select similar movies:</h3>
+      <div class="col-xs-4 col-sm-3 col-md-2 nopad text-center">
+        <label class="image-checkbox">
+          <img class="img-responsive"
+            src="https://s3bucket1abhinaav.s3.us-west-1.amazonaws.com/IMDB_Posters/imdb_tt0000574.png">
+          <input name="Movie 1" value="hello" type="checkbox">
+          <i class="fa fa-check hidden"></i>
+        </label>
+      </div>
+      <div class="col-xs-4 col-sm-3 col-md-2 nopad text-center">
+        <label class="image-checkbox">
+          <img class="img-responsive"
+            src="https://s3bucket1abhinaav.s3.us-west-1.amazonaws.com/IMDB_Posters/imdb_tt0002199.png">
+          <input name="image[]" value="" type="checkbox">
+          <i class="fa fa-check hidden"></i>
+        </label>
+      </div>
+      <div class="col-xs-4 col-sm-3 col-md-2 nopad text-center">
+        <label id="Image1" class="image-checkbox">
+          <img class="img-responsive"
+            src="https://s3bucket1abhinaav.s3.us-west-1.amazonaws.com/IMDB_Posters/imdb_tt0001892.png">
+          <input name="image[]" value="" type="checkbox">
+          <i class="fa fa-check hidden"></i>
+        </label>
+      </div>
+      <div id="Image2" class="col-xs-4 col-sm-3 col-md-2 nopad text-center">
+        <label class="image-checkbox">
+          <img class="img-responsive"
+            src="https://s3bucket1abhinaav.s3.us-west-1.amazonaws.com/IMDB_Posters/imdb_tt0002101.png">
+          <input name="image[]" value="" type="checkbox">
+          <i class="fa fa-check hidden"></i>
+        </label>
+      </div>
+      <div id="Image3" class="col-xs-4 col-sm-3 col-md-2 nopad text-center">
+        <label class="image-checkbox">
+          <img class="img-responsive"
+            src="https://s3bucket1abhinaav.s3.us-west-1.amazonaws.com/IMDB_Posters/imdb_tt0002130.png">
+          <input name="image[]" value="" type="checkbox">
+          <i class="fa fa-check hidden"></i>
+        </label>
+      </div>
+      <div class="col-xs-4 col-sm-3 col-md-2 nopad text-center">
+        <label class="image-checkbox">
+          <img class="img-responsive"
+            src="https://s3bucket1abhinaav.s3.us-west-1.amazonaws.com/IMDB_Posters/imdb_tt0002423.png">
+          <input name="image[]" value="" type="checkbox">
+          <i class="fa fa-check hidden"></i>
+        </label>
+      </div>
+      <div class="col-xs-4 col-sm-3 col-md-2 nopad text-center">
+        <label class="image-checkbox">
+          <img class="img-responsive"
+            src="https://s3bucket1abhinaav.s3.us-west-1.amazonaws.com/IMDB_Posters/imdb_tt0002445.png">
+          <input name="image[]" value="" type="checkbox">
+          <i class="fa fa-check hidden"></i>
+        </label>
+      </div>
+      <div class="col-xs-4 col-sm-3 col-md-2 nopad text-center">
+        <label class="image-checkbox">
+          <img class="img-responsive"
+            src="https://s3bucket1abhinaav.s3.us-west-1.amazonaws.com/IMDB_Posters/imdb_tt0002452.png">
+          <input name="image[]" value="" type="checkbox">
+          <i class="fa fa-check hidden"></i>
+        </label>
+      </div>
+      <div class="col-xs-4 col-sm-3 col-md-2 nopad text-center">
+        <label class="image-checkbox">
+          <img class="img-responsive"
+            src="https://s3bucket1abhinaav.s3.us-west-1.amazonaws.com/IMDB_Posters/imdb_tt0002461.png">
+          <input name="image[]" value="" type="checkbox">
+          <i class="fa fa-check hidden"></i>
+        </label>
+      </div>
+      <button onclick="runML()">Next</button>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>// image gallery
+      // init the state from the input
+      $(".image-checkbox").each(function () {
+        if ($(this).find('input[type="checkbox"]').first().attr("checked")) {
+          $(this).addClass('image-checkbox-checked');
+        } else {
+          $(this).removeClass('image-checkbox-checked');
+        }
+      });
+
+      // sync the state to the input
+      $(window).bind("pageshow", function() { 
+        $(".image-checkbox").on("click", function (e) {
+          $(this).toggleClass('image-checkbox-checked');
+          var $checkbox = $(this).find('input[type="checkbox"]');
+          $checkbox.prop("checked", !$checkbox.prop("checked"))
+
+          e.preventDefault();
+        });
+      });
+                //# sourceURL=pen.js
+    </script>
+    <script src="app.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</body>
+
+</html>

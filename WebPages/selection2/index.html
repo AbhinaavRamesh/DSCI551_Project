@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v4.1.1">
+    <title>Selection</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/pricing/">
+
+    <!-- Bootstrap core CSS -->
+    <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+    <!-- Custom styles for this template -->
+    <link href="pricing.css" rel="stylesheet">
+</head>
+<body onload="getGenreAndActorData()">
+    <div id="app">
+        <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+            <h5 class="my-0 mr-md-auto font-weight-normal">Movie Recommendation Application</h5>
+            <nav class="my-2 my-md-0 mr-md-3">
+              <a class="p-2 text-dark" href="../cover/index.html">Home</a>
+            </nav>
+          </div>
+    
+          <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+            <h1 class="display-4">Make a Selection</h1>
+            <p class="lead">Based on your selection between Genre, Actor, or Custom, we will provide you with a set of filters which will narrow down your preferences.
+              Based on the filtered choices we'll model your preferences to provide you with suitable movie recommendations</p>
+          </div>
+    
+          <div class="container">
+            <div class="card-deck mb-3 text-center">
+              <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                  <h4 class="my-0 font-weight-normal">Genre</h4>
+                </div>
+                <div class="card-body">
+                  <h1 class="card-title pricing-card-title"><small class="text-muted"></small></h1>
+                  <ul class="list-unstyled mt-3 mb-4">
+                    <select name="Genres" id="Genres">
+  
+                    </select>
+    
+                    <h1>
+    
+                    </h1>
+                    <img
+                      src="https://1.bp.blogspot.com/-k2zD5apsytM/XrN9EtzwF1I/AAAAAAAAhpE/gxtPIK6FM2Mk0vEqcZhrHcfV61n9XoutQCLcBGAsYHQ/s1600/istockphoto-1028639730-1024x1024.jpg"
+                      alt="Trulli" width="250" height="230">
+    
+                  </ul>
+    
+                  <a href="../navbars - genre/index.html"><button type="button" class="btn btn-lg btn-block btn-primary" id="genre-button">Let's Begin!</button></a>
+                </div>
+              </div>
+              <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                  <h4 class="my-0 font-weight-normal">Actor</h4>
+                </div>
+                <div class="card-body">
+                  <h1 class="card-title pricing-card-title"><small class="text-muted"></small></h1>
+                  <ul class="list-unstyled mt-3 mb-4">
+    
+                    <select name="Actors" id="Actors">
+
+                    </select>
+    
+                    <h1>
+    
+                    </h1>
+                    <img src="https://assets.vogue.com/photos/58913d9658aa89a00d542339/master/pass/gridofdudes1.jpg"
+                      alt="Trulli" width="250" height="230">
+    
+                  </ul>
+                  <a href="../navbars - actor/index.html"><button type="button" class="btn btn-lg btn-block btn-primary" id="actor-button">Let's Begin!</button></a>
+                </div>
+              </div>
+              <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                  <h4 class="my-0 font-weight-normal">Custom</h4>
+                </div>
+                <div class="card-body">
+                  <h1 class="card-title pricing-card-title"><small class="text-muted"></small></h1>
+                  <ul class="list-unstyled mt-3 mb-4">
+    
+                    <img src="http://sprunworld.com/wordpress/wp-content/uploads/2017/11/movie-sites.jpg" alt="Trulli"
+                      width="250" height="265">
+    
+    
+    
+                  </ul>
+                  <a href="../navbars - custom/index.html"><button type="button" class="btn btn-lg btn-block btn-primary">Let's Begin!</button></a>
+                </div>
+              </div>
+            </div>
+          </div>
+    </div>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

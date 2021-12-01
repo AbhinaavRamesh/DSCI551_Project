@@ -1,0 +1,204 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<body class="container" onload="viewDataset()">
+<br>
+<h3> Dataset Content </h3>
+</br>
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+<div class="container">
+    <div class="row header" style="text-align:center;color:green">
+        <h3> Dataset </h3>
+    </div>
+    <table id="example" class="table table-striped table-bordered" style="width:100%">
+        <thead>
+            <tr>
+                <th>Title ID</th>
+                <th>Title</th>
+                <th>Year</th>
+                <th>Genre</th>
+                <th>Duration</th>
+                <th>Country</th>
+                <th>Language</th>
+                <th>Actors</th>
+                <th>Rating</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody id="table_body">
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>Title ID</th>
+                <th>Title</th>
+                <th>Year</th>
+                <th>Genre</th>
+                <th>Duration</th>
+                <th>Country</th>
+                <th>Language</th>
+                <th>Actors</th>
+                <th>Rating</th>
+                <th>Description</th>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+<br>
+<h3> Import Additional Data </h3>
+</br>
+
+<form class="form-horizontal"  method="post">
+    
+	<div class="form-group">
+        <label for="csvfile" class="control-label col-xs-2">Name of the file</label>
+		<div class="col-xs-3">
+        <input type="file" class="form-control" id="input_csv" name="csv" id="csv" accept=".csv"/>
+		</div>
+    </div>
+	<div class="form-group">
+	<label for="login" class="control-label col-xs-2"></label>
+    <div class="col-xs-3">
+    <button type="button" onclick="importDataset();viewDataset();" class="btn btn-primary">Import</button>
+	</div>
+	</div>
+</form>
+
+<br>
+<h3> Stream Data </h3>
+</br>
+
+<form class="form-horizontal"  method="post">
+	<div class="form-group">
+	<label for="login" class="control-label col-xs-2"></label>
+    <div class="col-xs-3">
+    <button type="button" onclick="streamProducer();streamConsumer();viewDataset();" class="btn btn-primary">Stream Data</button>
+	</div>
+	</div>
+</form>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    var dataset_id = '{{ dataset_id }}';
+
+    var config = { headers: {  
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET,POST,OPTIONS,DELETE,PUT'}
+}
+
+const importDataset = () => {
+    var csv_path = document.getElementById("input_csv").value;
+    var csv_path = csv_path.split("\\").pop()
+    post_data = {"csv_path":csv_path, "dataset_id":dataset_id}
+
+
+    axios.post('http://localhost:5000/import_additional_data/', JSON.stringify(post_data),config)
+    .then(response => {
+        const data = response.data;});
+
+    alert("Dataset imported");
+
+}
+
+const viewDataset = () => {
+    console.log("inside view dataset");
+    post_data = {}
+    axios.get('http://localhost:5000/view_dataset/'+dataset_id, JSON.stringify(post_data),config)
+    .then(response => {
+    
+        const data = response.data.data;
+        // console.log(data);
+
+        // var table_body = document.getElementById("table_body");
+        // table_body.innerHTML = "";
+        var tb = $('#example').DataTable();
+        tb.clear().draw();
+        tb.destroy();
+
+        var table = document.getElementById("table_body");
+        for (var i = 0; i < data.length; i++){
+            var tr = document.createElement('tr');   
+            
+            var td1 = document.createElement('td');
+            var td2 = document.createElement('td');
+            var td3 = document.createElement('td');
+            var td4 = document.createElement('td');
+            var td5 = document.createElement('td');
+            var td6 = document.createElement('td');
+            var td7 = document.createElement('td');
+            var td8 = document.createElement('td');
+            var td9 = document.createElement('td');
+            var td10 = document.createElement('td');
+
+        
+            var text1 = document.createTextNode(data[i][0]);
+            var text2 = document.createTextNode(data[i][1]);
+            var text3 = document.createTextNode(data[i][2]);
+            var text4 = document.createTextNode(data[i][3]);
+            var text5 = document.createTextNode(data[i][4]);
+            var text6 = document.createTextNode(data[i][5]);
+            var text7 = document.createTextNode(data[i][6]);
+            var text8 = document.createTextNode(data[i][7]);
+            var text9 = document.createTextNode(data[i][8]);
+            var text10 = document.createTextNode(data[i][9]);
+
+        
+            td1.appendChild(text1);
+            td2.appendChild(text2);
+            td3.appendChild(text3);
+            td4.appendChild(text4);
+            td5.appendChild(text5);
+            td6.appendChild(text6);
+            td7.appendChild(text7);
+            td8.appendChild(text8);
+            td9.appendChild(text9);
+            td10.appendChild(text10);
+            tr.appendChild(td1);
+            tr.appendChild(td2);
+            tr.appendChild(td3);
+            tr.appendChild(td4);
+            tr.appendChild(td5);
+            tr.appendChild(td6);
+            tr.appendChild(td7);
+            tr.appendChild(td8);
+            tr.appendChild(td9);
+            tr.appendChild(td10);
+        
+            table.appendChild(tr);
+        }
+
+        $(document).ready(function() {
+            $('#example').DataTable();
+            } );
+    });
+
+    
+
+}
+
+const streamProducer = () => {
+    console.log("inside producer");
+    post_data = {};
+    axios.post('http://localhost:5000/stream_producer/', JSON.stringify(post_data),config);
+}
+
+const streamConsumer = () => {
+
+    console.log("inside consumer");
+    post_data = {};
+    axios.post('http://localhost:5000/stream_consumer/'+dataset_id, JSON.stringify(post_data),config);
+    
+    // viewDataset(dataset_id);
+    alert("Data Streamed");
+
+}
+</script>
+</body>

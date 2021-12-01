@@ -1,0 +1,112 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body class="container" onload="listDatasets()">
+<br>
+<h3> Import New Dataset </h3>
+</br>
+<form class="form-horizontal"  method="post">
+    
+	<div class="form-group">
+        <label for="csvfile" class="control-label col-xs-2">Name of the file</label>
+		<div class="col-xs-3">
+        <input type="file" class="form-control" id="input_csv" name="csv" id="csv" accept=".csv"/>
+		</div>
+    </div>
+	<div class="form-group">
+	<label for="login" class="control-label col-xs-2"></label>
+    <div class="col-xs-3">
+    <button type="button" onClick="importNewDataset();listDatasets();listDatasets();" class="btn btn-primary">Import</button>
+	</div>
+	</div>
+</form>
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+<div class="container">
+    <div class="row header" style="text-align:center;color:green">
+        <h3> Datasets </h3>
+    </div>
+    <table id="example" class="table table-striped table-bordered" style="width:100%">
+        <thead>
+            <tr>
+                <th>Dataset Name</th>
+                <th>Size</th>
+            </tr>
+        </thead>
+        <tbody id="table_body">
+        </tbody>
+    </table>
+</div>
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    var config = { headers: {  
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET,POST,OPTIONS,DELETE,PUT'}
+}
+
+const importNewDataset = () => {
+    var csv_path = document.getElementById("input_csv").value;
+    var csv_path = csv_path.split("\\").pop()
+    post_data = {"csv_path":csv_path}
+
+    axios.post('http://localhost:8081/import_new_data/', JSON.stringify(post_data),config)
+    .then(response => {
+        const data = response.data;});
+    
+}
+
+const listDatasets = () => {
+
+    console.log("inside list datasets");
+
+    post_data = {}
+    axios.get('http://localhost:8080/list_datasets/', JSON.stringify(post_data),config)
+    .then(response => {
+        const data = response.data.data;
+
+        console.log(data);
+
+        // var table_body = document.getElementById("myTableData");
+        // table_body.innerHTML = "";
+        var tb = $('#example').DataTable();
+        tb.clear().draw();
+        tb.destroy();
+
+        var table = document.getElementById("table_body");
+        for (var i = 0; i < data.length; i++){
+            var tr = document.createElement('tr');   
+        
+            var td1 = document.createElement('td');
+            var td2 = document.createElement('td');
+
+            var a = document.createElement('a');
+            var linkText = document.createTextNode("Dataset "+data[i][0].toString());
+            a.appendChild(linkText);
+            a.href = "http://localhost:8082/view_dataset_page/"+data[i][0].toString();
+        
+            var text2 = document.createTextNode(data[i][1]);
+        
+            td1.appendChild(a);
+            td2.appendChild(text2);
+            tr.appendChild(td1);
+            tr.appendChild(td2);
+        
+            table.appendChild(tr);
+        }
+
+        $(document).ready(function() {
+            $('#example').DataTable();
+            } );
+    });
+
+}
+</script>
+</body>
