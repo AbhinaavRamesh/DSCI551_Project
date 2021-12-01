@@ -111,24 +111,50 @@ def Clean_Columns(df,columns=['imdb_title_id', 'title', 'year', 'genre',
     return df
 def processSimilarMovies(similarMovies):
     #Image Processing
-    try:
-        return [json.loads(decode(Image.fromarray(io.imread(path)[400:,80:-80]),symbols=[ZBarSymbol.QRCODE])[0].data)['imdb_title_id'] for path in similarMovies]
-    except:
-        return None
+    #try:
+        ls=[]
+        for path in similarMovies:
+            print("Decoding...",path)
+            img=Image.fromarray(io.imread(path)[400:,80:-80])
+            data=decode(img,symbols=[ZBarSymbol.QRCODE])[0].data
+            ls.append(json.loads(data)['imdb_title_id'])
+        return ls
+    #except:
+     #   return None
 
 def ML_API(dictFilter,similarMovies=[]):
     #Connect to PyMongo and return DF
-    
+    similarMovies=processSimilarMovies(similarMovies)
+    str1=""
+    for it in similarMovies:
+        str1+=it+", "
     dfData=getData(dictFilter)
     dfMLDB=getMLDB()
     if len(dfMLDB)>0:
-        temp=dfMLDB.loc[(dfMLDB["FilterInfo"]==dictFilter) & (dfMLDB["lenData"]==len(dfData))]
+
+        temp=dfMLDB.loc[(dfMLDB["FilterInfo"]==dictFilter) & (dfMLDB["lenData"]==len(dfData))& (dfMLDB["similarMovies"]==str1)] 
+        # print(temp)
+        # ls1=temp["similarMovies"]
+        # import functools 
+        # flag=True
+        # for it in range(len(ls1)):
+        #     ls=list(set(ls1[it]) - set(similarMovies))
+        #     if len(ls)==0:
+        #         temp=dfMLDB.iloc[it,:]
+        #         flag=False
+        
+            
         #Check filterDict and len(Data)
-        if len(temp)>0 :
+        if len(temp)>0 :#and flag==False:
             print("Found previous instance for same Filters....")
             print("Returning Predictions...")
-            return list(temp["Recommendations"])[0]
-        if len(dfData)<=10:
+            ls2=list(temp["Recommendations"])
+            if isinstance(ls2[0], str):
+                return ls2
+            else:
+                return ls2[0]
+            
+    if len(dfData)<=10:
             print("Too few movies to cluster, returning original list....")
             return dfData['imdb_title_id']
     if len(dfData)>=0: 
@@ -218,7 +244,7 @@ def ML_API(dictFilter,similarMovies=[]):
         recommendations=[]
         if len(similarMovies)>0:
             print("Finding Info from Selected Images for Similar Movies...")
-            similarMovies=processSimilarMovies(similarMovies)
+            
             clustersConsidered=[]
             for it in similarMovies:
                 clustersConsidered.append(int(result_pdf.loc[result_pdf["imdb_title_id"]==it]["prediction"]))
@@ -231,7 +257,7 @@ def ML_API(dictFilter,similarMovies=[]):
                     for x in result_pdf.loc[result_pdf["prediction"]==i].sort_values(by=['avg_vote'], ascending=False).iterrows():
                         if recommendationCnt<5:
                             recom=x[1]["imdb_title_id"]
-                            if recom not in recommendations:
+                            if recom not in recommendations and recom not in similarMovies:
                                 recommendations.append(recom)
                                 recommendationCnt+=1
                                 break
@@ -252,6 +278,8 @@ def ML_API(dictFilter,similarMovies=[]):
         dict_record["Features"]=dict1
         dict_record["Recommendations"]=recommendations
         dict_record["lenData"]=int(len(result_pdf))
+        
+        dict_record["similarMovies"]=str1
         updateMLDB(dict_record)
         return recommendations    
 @app.route('/runML/',methods=['GET','POST'])
@@ -275,42 +303,44 @@ def get_filtered_values():
     return_val = {}
     genres=set([])
     if req_json['genre'] is None:
-        encoding = 'utf-8'
-        f=open("GenreList.txt",'rb')
-        genre_list=[i.strip().decode(encoding) for i in f.readlines()]
-        f.close()
-        cnt=collections.Counter()
-        for word in genre_list:
-            cnt[word] += 1
-        genre_list=[i[0] for i in cnt.most_common(500)]
-        #genre_list = list(pd.unique(df.genre.str.split(', ',expand=True).stack()))
-        #genre_list  = list(itertools.chain(*genre_list))
-        #genre_list  = list(set(genre_list))
+        # encoding = 'utf-8'
+        # f=open("GenreList.txt",'rb')
+        # genre_list=[i.strip().decode(encoding) for i in f.readlines()]
+        # f.close()
+        # cnt=collections.Counter()
+        # for word in genre_list:
+        #     cnt[word] += 1
+        # genre_list=[i[0] for i in cnt.most_common(500)]
+        genre_list = df.genre.str.split(', ').tolist()
+        genre_list  = list(itertools.chain(*genre_list))
+        genre_list  = list(set(genre_list))
         
         return_val["genres"] = genre_list
     else:
         return_val["genres"] = [req_json['genre']]
 
     if req_json['actor'] is None and req_json['coactor'] is None:
-        encoding = 'utf-8'
-        f=open("ActorList.txt",'rb')
-        actor_list=[i.strip().decode(encoding) for i in f.readlines()]
-        f.close()
-        #actor_list = list(pd.unique(df.actors.str.split(', ',expand=True).stack()))
-        #actor_list = list(itertools.chain(*actor_list))
+        # encoding = 'utf-8'
+        # f=open("ActorList.txt",'rb')
+        # actor_list=[i.strip().decode(encoding) for i in f.readlines()]
+        # f.close()
+        actor_list = df.actors.str.split(', ').tolist()
+        actor_list = list(itertools.chain(*actor_list))
         cnt=collections.Counter()
         for word in actor_list:
-            cnt[word] += 1
+             cnt[word] += 1
         actor_list=[i[0] for i in cnt.most_common(500000)]
+
         return_val["actors"] = actor_list
         return_val["coactors"] = None
     elif req_json['actor'] is not None and req_json['coactor'] is None:
         return_val["actors"] = [req_json['actor']]
         actor_list = df.actors.str.split(', ').tolist()
         actor_list = list(itertools.chain(*actor_list))
-        B=actor_list[:]
-        actor_list.sort(key=lambda x:B.count(x), reverse=True)
-        actor_list = list(set(actor_list))
+        cnt=collections.Counter()
+        for word in actor_list:
+             cnt[word] += 1
+        actor_list=[i[0] for i in cnt.most_common(500000)]
         actor_list.remove(req_json['actor'])
         return_val["coactors"] = actor_list
     elif req_json['actor'] is not None and req_json['coactor'] is not None:
@@ -356,10 +386,7 @@ def getFilmIDS():
     req_json = request.get_json()
     df=getData(req_json)
     LS=list(df['imdb_title_id'])
-    f=open("PythonScripts\Links.txt","r")
-    ls1=[i.strip() for i in f.readlines()]
-    f.close()
-    return jsonify([i for i in LS if i in ls1])
+    return jsonify(LS)
 
 @app.route('/genre_graph/',methods=['GET','POST'])
 @cross_origin(supports_credentials=True)
@@ -620,6 +647,9 @@ def stream_consumer(dataset_id):
 @cross_origin(supports_credentials=True)
 def view_dataset_page(dataset_id):
     return render_template('index.html', dataset_id=dataset_id)
+@app.route('/WebPages')
+def WebPages():
+    return render_template('../WebPages/cover/index.html')
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--port")

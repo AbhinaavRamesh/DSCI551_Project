@@ -3,87 +3,110 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 
-<body class="container" onload="viewDataset()">
-<br>
-<h3> Dataset Content </h3>
-</br>
+<body  onload="viewDataset()">
+    <div class="container" style="width:100%;">
+        <nav class="navbar navbar-inverse" style="width:100%;">
+            <div class="container" style="width:100%;">
+                <div class="row" style="width:100%;margin-left: 2%;margin-right: 2%;margin-top: 1%;">
+                  <div class="col">
+
+                    <h3 class="nav navbar-nav navbar-header" style="color: white;text-align: center;">Movie Recommendation Application</h3>
+                  </div>
+                  <div class="col-6">
+                    
+                  </div>
+                  <div class="col">
+                    <ul class="nav navbar-nav navbar-right" style="margin-right: 3%;">
+                        <li ><a href="#" onclick="history.go(-1)">Back</a></li>
+                        
+    
+                    </ul>
+                  </div>
+                </div>
+            </div>
+        </nav>
+        <br>
+        <h3> Dataset Content </h3>
+        </br>
 
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
-<div class="container">
-    <div class="row header" style="text-align:center;color:green">
-        <h3> Dataset </h3>
+        <div class="container" style="width:80%;align-items: center;">
+            <div class="row header" style="text-align:center;color:green">
+                <h3> Dataset </h3>
+            </div>
+            <table id="example" class="table table-striped table-bordered" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Title ID</th>
+                        <th>Title</th>
+                        <th>Year</th>
+                        <th>Genre</th>
+                        <th>Duration</th>
+                        <th>Country</th>
+                        <th>Language</th>
+                        <th>Actors</th>
+                        <th>Rating</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody id="table_body">
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Title ID</th>
+                        <th>Title</th>
+                        <th>Year</th>
+                        <th>Genre</th>
+                        <th>Duration</th>
+                        <th>Country</th>
+                        <th>Language</th>
+                        <th>Actors</th>
+                        <th>Rating</th>
+                        <th>Description</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <br>
+        <h3> Import Additional Data </h3>
+        </br>
+
+        <form class="form-horizontal"  method="post">
+            
+            <div class="form-group">
+                <label for="csvfile" class="control-label col-xs-2">Name of the file</label>
+                <div class="col-xs-3">
+                <input type="file" class="form-control" id="input_csv" name="csv" id="csv" accept=".csv"/>
+                </div>
+            </div>
+            <div class="form-group">
+            <label for="login" class="control-label col-xs-2"></label>
+            <div class="col-xs-3">
+            <button type="button" onclick="importDataset();" class="btn btn-primary">Import</button>
+            </div>
+            </div>
+        </form>
+
+        <br>
+        <h3> Stream Data </h3>
+        </br>
+
+        <form class="form-horizontal"  method="post">
+            <div class="form-group">
+            <label for="login" class="control-label col-xs-2"></label>
+            <div class="col-xs-3">
+            <button type="button" onclick="streamProducer();streamConsumer();" class="btn btn-primary">Stream Data</button>
+            </div>
+            </div>
+        </form>
     </div>
-    <table id="example" class="table table-striped table-bordered" style="width:100%">
-        <thead>
-            <tr>
-                <th>Title ID</th>
-                <th>Title</th>
-                <th>Year</th>
-                <th>Genre</th>
-                <th>Duration</th>
-                <th>Country</th>
-                <th>Language</th>
-                <th>Actors</th>
-                <th>Rating</th>
-                <th>Description</th>
-            </tr>
-        </thead>
-        <tbody id="table_body">
-        </tbody>
-        <tfoot>
-            <tr>
-                <th>Title ID</th>
-                <th>Title</th>
-                <th>Year</th>
-                <th>Genre</th>
-                <th>Duration</th>
-                <th>Country</th>
-                <th>Language</th>
-                <th>Actors</th>
-                <th>Rating</th>
-                <th>Description</th>
-            </tr>
-        </tfoot>
-    </table>
-</div>
-
-<br>
-<h3> Import Additional Data </h3>
-</br>
-
-<form class="form-horizontal"  method="post">
-    
-	<div class="form-group">
-        <label for="csvfile" class="control-label col-xs-2">Name of the file</label>
-		<div class="col-xs-3">
-        <input type="file" class="form-control" id="input_csv" name="csv" id="csv" accept=".csv"/>
-		</div>
-    </div>
-	<div class="form-group">
-	<label for="login" class="control-label col-xs-2"></label>
-    <div class="col-xs-3">
-    <button type="button" onclick="importDataset();viewDataset();" class="btn btn-primary">Import</button>
-	</div>
-	</div>
-</form>
-
-<br>
-<h3> Stream Data </h3>
-</br>
-
-<form class="form-horizontal"  method="post">
-	<div class="form-group">
-	<label for="login" class="control-label col-xs-2"></label>
-    <div class="col-xs-3">
-    <button type="button" onclick="streamProducer();streamConsumer();viewDataset();" class="btn btn-primary">Stream Data</button>
-	</div>
-	</div>
-</form>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
     var dataset_id = '{{ dataset_id }}';
@@ -100,9 +123,9 @@ const importDataset = () => {
     post_data = {"csv_path":csv_path, "dataset_id":dataset_id}
 
 
-    axios.post('http://localhost:5000/import_additional_data/', JSON.stringify(post_data),config)
+    axios.post('http://localhost:8080/import_additional_data/', JSON.stringify(post_data),config)
     .then(response => {
-        const data = response.data;});
+        const data = response.data;viewDataset();});
 
     alert("Dataset imported");
 
@@ -111,7 +134,7 @@ const importDataset = () => {
 const viewDataset = () => {
     console.log("inside view dataset");
     post_data = {}
-    axios.get('http://localhost:5000/view_dataset/'+dataset_id, JSON.stringify(post_data),config)
+    axios.get('http://localhost:8081/view_dataset/'+dataset_id, JSON.stringify(post_data),config)
     .then(response => {
     
         const data = response.data.data;
@@ -187,14 +210,14 @@ const viewDataset = () => {
 const streamProducer = () => {
     console.log("inside producer");
     post_data = {};
-    axios.post('http://localhost:5000/stream_producer/', JSON.stringify(post_data),config);
+    axios.post('http://localhost:8082/stream_producer/', JSON.stringify(post_data),config);
 }
 
 const streamConsumer = () => {
 
     console.log("inside consumer");
     post_data = {};
-    axios.post('http://localhost:5000/stream_consumer/'+dataset_id, JSON.stringify(post_data),config);
+    axios.post('http://localhost:8083/stream_consumer/'+dataset_id, JSON.stringify(post_data),config).then(response => {viewDataset();});
     
     // viewDataset(dataset_id);
     alert("Data Streamed");

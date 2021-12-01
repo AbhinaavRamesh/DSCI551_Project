@@ -3,6 +3,7 @@ var genre = null
 var coactor = null
 var rating = null
 var language = null
+var duration=null
 var GenreGraphData=[]
 var ActorGraphData=[]
 var DurationGraphData=[]
@@ -12,6 +13,14 @@ var config = { headers: {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET,POST,OPTIONS,DELETE,PUT'}
 }
+function saveChoices() {
+    localStorage['actor'] = actor
+    localStorage['genre'] = genre
+    localStorage['coactor'] = coactor
+    localStorage['rating'] = rating
+    localStorage['language'] = language
+    localStorage['duration'] = duration
+};
 function setDefaults(parent) {
 	var option = document.createElement('option');
 	option.text = "Select Option"
@@ -221,7 +230,7 @@ function languageSelect() {
 }
 
 const populateData = () => {
-    post_data = {"genre": genre, "actor": actor, "coactor": coactor, "rating": rating, "language": language,"duration":null}
+    post_data = {"genre": genre, "actor": actor, "coactor": coactor, "rating": rating, "language": language,"duration":duration}
     axios.post('http://localhost:8080/get_filtered_values/', JSON.stringify(post_data),config)
         .then(response => {
             const data = response.data;
@@ -233,6 +242,7 @@ const populateData = () => {
             appendToCoActor(data.coactors)}
             appendToRating(data.ratings)
             appendToLanguage(data.languages)
+            appendToDuration(data.durations)
 			// Update the movies counter
 			document.getElementById("movies-counter").innerHTML = parseInt(data.movieCnt)
         })
@@ -321,7 +331,10 @@ const appendToCoActor = (coactors) => {
         dropdown.appendChild(option);
     }
 };
-
+function durationSelect() {
+    duration = document.getElementById('duration-dropdown').value
+    populateData()
+}
 const appendToRating = (ratings) => {
     var dropdown = document.getElementById("rating-dropdown");
     removeAllChildNodes(dropdown)
@@ -335,6 +348,20 @@ const appendToRating = (ratings) => {
         dropdown.appendChild(option);
     }
 };
+const appendToDuration = (durations) => {
+    var dropdown = document.getElementById("duration-dropdown");
+    removeAllChildNodes(dropdown);
+	if (durations.length > 1) {
+		setDefaults(dropdown)
+	}
+    //iterate over all durations
+    for(var i = 0; i < durations.length; i++) {
+        var option = document.createElement('option');
+        option.text = option.value = durations[i];
+        dropdown.appendChild(option);
+    }
+};
+
 
 const appendToLanguage = (languages) => {
     var dropdown = document.getElementById("language-dropdown");

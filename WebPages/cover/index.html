@@ -29,6 +29,30 @@
           font-size: 3.5rem;
         }
       }
+  .btn span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.btn span:after {
+  content: '\00bb';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+
+.btn:hover span {
+  padding-right: 25px;
+}
+
+.btn:hover span:after {
+  opacity: 1;
+  right: 0;
+}
     </style>
     <!-- Custom styles for this template -->
     <link href="cover.css" rel="stylesheet">
@@ -36,20 +60,16 @@
   <body style="background-image: url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bW92aWV8ZW58MHx8MHx8&ixlib=rb-1.2.1&w=1000&q=80'); height: 100vh;" class="text-center">
     <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
   <header class="masthead mb-auto">
-    <div class="inner">
-      <h3 class="masthead-brand">Movie Recommendation Application</h3>
-      <nav class="nav nav-masthead justify-content-center">
-        <a class="nav-link active" href="#">Home</a>
-      </nav>
-    </div>
+    
   </header>
 
 
   <main role="main" class="inner cover">
     <h1 class="cover-heading">Analysis of IMBD Movies</h1>
-    <p class="lead">A smart recommender application that handles both the data (both csv and Image(Synthetic)) and the machine learning frameworks to give the best UX</p>
+    <p class="lead">A smart recommender application that handles data and user-input queries to model preferences and recommend Movies. Application has features to explore Data, Insert New Data, Stream New Data and View Added data. The Machine Learning framework has a database to archive queries and responds faster to same queries.</p>
     <p class="lead">
-      <a href="../selection2/index.html" class="btn btn-lg btn-secondary">Next</a>
+      <a href="../datasets_page/index.html" class="btn btn-lg btn-secondary "><span>Data Exploration</span></a>
+      <a href="../selection2/index.html" class="btn btn-lg btn-secondary "><span>Data Analysis</span></a>
     </p>
   </main>
 

@@ -6,9 +6,31 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
-<body class="container" onload="listDatasets()">
+<body  onload="listDatasets()">
+    <div class="container" style="width:100%; ">
+        <nav class="navbar navbar-inverse" style="width:100%;">
+            <div class="container" style="width:100%;">
+                <div class="row" style="width:100%;margin-left: 2%;margin-right: 2%;margin-top: 1%;">
+                  <div class="col">
+
+                    <h3 class="nav navbar-nav navbar-header" style="color: white;text-align: center;">Movie Recommendation Application</h3>
+                  </div>
+                  <div class="col-6">
+                    
+                  </div>
+                  <div class="col">
+                    <ul class="nav navbar-nav navbar-right" style="margin-right: 3%;">
+                        <li ><a href="../cover/index.html">Home</a></li>
+                        <li><a href="http://localhost:8082/view_dataset_page/1">Sample Data</a></li>
+                        <li><a href="../selection2/index.html">Data Analysis</a></li>
+                      </ul>
+                  </div>
+                </div>
+            </div>
+        </nav>
+    
 <br>
-<h3> Import New Dataset </h3>
+<h3 style="margin-left: 2%;"> Import New Dataset </h3>
 </br>
 <form class="form-horizontal"  method="post">
     
@@ -21,14 +43,14 @@
 	<div class="form-group">
 	<label for="login" class="control-label col-xs-2"></label>
     <div class="col-xs-3">
-    <button type="button" onClick="importNewDataset();listDatasets();listDatasets();" class="btn btn-primary">Import</button>
+    <button type="button" onClick="importNewDataset();" class="btn btn-primary">Import</button>
 	</div>
 	</div>
 </form>
 
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
-<div class="container">
+<div class="container" style="width:80%;align-items: center;">
     <div class="row header" style="text-align:center;color:green">
         <h3> Datasets </h3>
     </div>
@@ -59,7 +81,8 @@ const importNewDataset = () => {
 
     axios.post('http://localhost:8081/import_new_data/', JSON.stringify(post_data),config)
     .then(response => {
-        const data = response.data;});
+        const data = response.data;
+        listDatasets();});
     
 }
 
@@ -109,4 +132,5 @@ const listDatasets = () => {
 
 }
 </script>
+</div>
 </body>

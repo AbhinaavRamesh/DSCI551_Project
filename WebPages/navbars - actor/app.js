@@ -3,6 +3,7 @@ var genre = null
 var coactor = null
 var rating = null
 var language = null
+var duration=null
 var GenreGraphData=[]
 var ActorGraphData=[]
 var DurationGraphData=[]
@@ -12,6 +13,14 @@ var config = { headers: {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET,POST,OPTIONS,DELETE,PUT'}
 }
+function saveChoices() {
+    localStorage['actor'] = actor
+    localStorage['genre'] = genre
+    localStorage['coactor'] = coactor
+    localStorage['rating'] = rating
+    localStorage['language'] = language
+    localStorage['duration'] = duration
+};
 function setActor() {
     actor = localStorage['actor']
     document.getElementById('actor-title').innerHTML = "ACTOR: " + actor 
@@ -228,9 +237,11 @@ const populateData = () => {
             console.log(`Received response: `, data);
             // Process data
             appendToGenre(data.genres)
-            appendToCoActor(data.coactors)
+            if (data.coactors != null){
+                appendToCoActor(data.coactors)}
             appendToRating(data.ratings)
             appendToLanguage(data.languages)
+            appendToDuration(data.durations)
 			// Update the movies counter
 			document.getElementById("movies-counter").innerHTML = parseInt(data.movieCnt)
         })
@@ -288,12 +299,28 @@ const populateData = () => {
             
 
     };
-
+    function durationSelect() {
+        duration = document.getElementById('duration-dropdown').value
+        populateData()
+    }
 function removeAllChildNodes(parent) {
     while (parent.firstChild) {
         parent.removeChild(parent.firstChild);
     }
 }
+const appendToDuration = (durations) => {
+    var dropdown = document.getElementById("duration-dropdown");
+    removeAllChildNodes(dropdown);
+	if (durations.length > 1) {
+		setDefaults(dropdown)
+	}
+    //iterate over all durations
+    for(var i = 0; i < durations.length; i++) {
+        var option = document.createElement('option');
+        option.text = option.value = durations[i];
+        dropdown.appendChild(option);
+    }
+};
 
 const appendToGenre = (genres) => {
     var dropdown = document.getElementById("genre-dropdown");
